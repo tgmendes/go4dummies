@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"log"
 
-	"github.com/tgmendes/go4dummies/internal"
+	restaurant "github.com/tgmendes/go4dummies/internal"
 )
 
 // Store represents a customer service for handling customer data.
@@ -37,12 +37,27 @@ func (s *Store) List() ([]Customer, error) {
 
 // Retrieve returns a customer for a given ID.
 func (s *Store) Retrieve(id int) (*Customer, error) {
+
 	return nil, nil
 }
 
 // Create creates a new customer in the db.
 func (s *Store) Create(newCust *NewCustomer) (*Customer, error) {
-	return nil, nil
+	b, err := json.Marshal(newCust)
+	if err != nil {
+		return nil, err
+	}
+
+	b, err = s.db.Add(b)
+	if err != nil {
+		return nil, err
+	}
+
+	cust := &Customer{}
+	if err := json.Unmarshal(b, cust); err != nil {
+		return nil, err
+	}
+	return cust, nil
 }
 
 // Update updates the customer with a given ID with the new provided data.
