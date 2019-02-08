@@ -6,21 +6,21 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/tgmendes/go4dummies/internal/customer"
+	. "github.com/tgmendes/go4dummies/internal/customer"
 
 	"github.com/tgmendes/go4dummies/internal/mocks"
 )
 
-var expCustomers []customer.Customer
+var expCustomers []Customer
 
 func init() {
-	expCustomers = []customer.Customer{
-		customer.Customer{
+	expCustomers = []Customer{
+		Customer{
 			ID:    1,
 			Name:  "Joey Banana",
 			Email: "joey@banana.com",
 		},
-		customer.Customer{
+		Customer{
 			ID:    1,
 			Name:  "Jane Potato",
 			Email: "jane@potato.com",
@@ -63,7 +63,9 @@ func TestList(t *testing.T) {
 				ListFn: tC.listFn,
 			}
 
-			s := customer.NewStore(mockDb)
+			s := &Store{
+				DB: mockDb,
+			}
 
 			// when
 			cust, err := s.List()
@@ -94,12 +96,12 @@ func TestList(t *testing.T) {
 }
 
 func TestCreate(t *testing.T) {
-	dbCust := &customer.Customer{
+	dbCust := &Customer{
 		ID:    1,
 		Name:  "joe",
 		Email: "joe@banana.com",
 	}
-	newCust := &customer.NewCustomer{
+	newCust := &NewCustomer{
 		Name:  "joe",
 		Email: "joe@banana.com",
 	}
@@ -112,7 +114,7 @@ func TestCreate(t *testing.T) {
 		{
 			desc: "creates successfully a customer and returns the new one",
 			addFn: func(entity []byte) ([]byte, error) {
-				newCust := &customer.NewCustomer{}
+				newCust := &NewCustomer{}
 				json.Unmarshal(entity, newCust)
 
 				return json.Marshal(dbCust)
@@ -141,7 +143,9 @@ func TestCreate(t *testing.T) {
 				AddFn: tC.addFn,
 			}
 
-			s := customer.NewStore(mockDb)
+			s := &Store{
+				DB: mockDb,
+			}
 
 			// when
 			cust, err := s.Create(newCust)
