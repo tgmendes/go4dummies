@@ -1,0 +1,27 @@
+{
+    "apiKey": "someOrderKey",
+    "id": 1234,
+    "datePlaced": 1549896603,
+    "method": "pickup",
+    "payment": "Card",
+    "restaurantAPIKey": "someRestaurantKey",
+    "recipientAPIKey": "someUserKey",
+    "items": [
+        {
+            "apiKey": "someItemKey",
+            "name": "someItemName",
+            "comments": "nothing to add",
+            "price": 100.12,
+            "totalPrice": 200.2,
+            "customizationChoices": null
+        },
+        {
+            "apiKey": "anotherItemKey",
+            "name": "anotherItemName",
+            "comments": "nothing to add",
+            "price": 10.12,
+            "totalPrice": 20.2,
+            "customizationChoices": null
+        }
+    ]
+}
