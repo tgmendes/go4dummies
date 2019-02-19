@@ -1,0 +1,163 @@
+Will you take that API to Go?
+Pixels Camp
+23 Mar 2019
+Tags: API, Server, Testing
+
+Tiago Mendes
+Volkswagen Digital Lab Lisbon
+tiago@vw-dilab.com
+
+* Why Go?
+.image img/GO_LEARN.png _ 500
+
+* Simplicity and Explicitness
+A web server
+
+* Standard Library 
+A json example
+
+* Concurrency
+a concurrency example
+
+
+* Built for the web
+slight history
+
+* Go... Huh, yeah, what is it good for?
+.image img/DEATH_METAL_GOPHER.png _ 500
+
+* Some examples
+
+- Web Servers
+- Command line utilities
+- Crawlers
+- Proxies
+- OS Stuff
+
+* Famous Go projects
+- [[https://github.com/docker/docker-ce][Docker]]
+- [[https://github.com/kubernetes/kubernetes][Kubernetes]]
+- [[https://github.com/hashicorp][Hashicorp (Vault, Terraform, Consul)]]
+- [[https://github.com/mholt/caddy][Caddy]]
+- [[https://github.com/prometheus/prometheus][Prometheus]]
+- [[https://github.com/gohugoio/hugo][Hugo]]
+
+
+* (even more) Stranger things...
+.image img/StrangerThingsGophers.png _ 500
+
+* Composition vs Inheritance
+- Insert struct example
+
+* Interface implementation
+- insert interface example
+
+* Error handling
+- insert error example
+
+* Ideomatic stuff
+- Lots of concise variable naming (not uncommon to see `r` , `w` , `err` , `b` , etc.);
+- No generics;
+- Lack of functional style helpers (e.g. `forEach` , `map` , etc.);
+- No private, protected or public concept - exported or unexported instead;
+- Comments are mandatory (by linting) on exported variables and functions;
+- Unused imports or variables are a compilation error;
+- You need to deal with pointers.
+
+* GopherEats API
+.image img/CouchPotatoGopher.png _ 500
+
+* Consuming third party APIs
+* The code
+* The test
+* Another example
+* Another test
+
+
+* Going Concurrent
+* implement restaurant crawler
+
+* Using Databases
+* an example of storing restaurant data to the database
+
+* The Server
+* handlefunc
+* handler
+* mux
+* test example
+
+* Tying it all up
+show the main
+
+** Integration Testing
+
+* Project Layout
+.image img/GOPHER_ROCKS.png _ 500
+
+
+    
+* Folder Structure Explained
+    /cmd
+Contains all programs belonging to the project
+
+    /internal
+Packages that need to be imported by programs within the project (cannot be imported by external programs)
+
+    /internal/platform
+Packages that support the project (database connectors, logging, etc.)
+
+* Folder Structure Explained (Cont.)
+
+    /pkg
+Packages that should be imported by external programs
+
+    /vendor
+Contains third party libraries (becoming deprecated with go modules)
+
+
+* References
+.link https://www.ardanlabs.com/blog/2017/02/package-oriented-design.html Package Oriented Design (William Kennedy)
+
+* Good Practices
+.image img/GOPHER_STAR_WARS.png _ 500
+
+* General
+- Less is more, so consider if you really need a framework; a Go project can virtually run without dependencies;
+- Use short and descriptive names for variables ( `count` instead of `c`, `cust` instead of `customer` );
+- Single letter variables are OK to use in limited scope situations (such as loop indices);
+- Use scoping to guide you in naming (the farther away, the more descriptive the name should be);
+- Avoid stuttering when naming package functions (prefer log.Info over log.LogInfo)
+
+* Package Naming
+- Package naming and organization will have a huge impact on Go code
+- Package names should describe their purpose 
+- They should be short (e.g. trasnsport and not transportmecahnisms)
+- They should be clear, and describe external dependency (bytes, postgres)
+- Avoid catchall packages (util, helpers)
+- Package organization has a big impact on testability
+
+* Package Organization
+- Avoid creating too many or too few packages
+- Packages should contain code that has one purpose (e.g. archive, crypto, order)
+- Sometimes you need to organize packages under a parent, for organizational purposes
+- Consider organizing packages by domain
+- More on this: [[https://medium.com/@benbjohnson/standard-package-layout-7cdbc8391fc1][Ben Johnson]] 
+
+* Resources
+.image img/GOPHER_SAFARI.png _ 500
+
+* Useful Links
+.link https://github.com/golang-standards/project-layout Project Layout
+.link https://go-proverbs.github.io/ Go Proverbs
+.link https://talks.golang.org/2012/concurrency.slide#1 Go Concurrency Patterns
+.link https://speakerdeck.com/mitchellh/advanced-testing-with-go Hashimoto, Advanced Testing in Go
+.link https://medium.com/@benbjohnson/structuring-tests-in-go-46ddee7a25c Ben Johnson, Testing in Go
+.link https://gobyexample.com/pointers Go by Example
+
+* Useful Links (MORE)
+.link https://www.youtube.com/watch?v=8hQG7QlcLBk Hashimoto, Advanced Testing in Go (Video)
+.link https://www.youtube.com/watch?v=MzTcsI6tn-0 Ashley McNamara + Brian Ketelsen, Go best practices (Video)
+.link https://www.youtube.com/watch?v=yi5A3cK1LNA&t=443s Blake Mizerany, Three fallacies of dependencies(Video)
+.link https://github.com/upspin/upspin Upspin (Inspiration)
+.link https://github.com/kubernetes/kubernetes Kubernetes (Inspiration)
+

@@ -1,0 +1,314 @@
+
+* Structuring a Go project
+
+* 
+.image img/folders.png _ 350
+
+
+* 
+    
+    /cmd
+Contains all 
+
+    /internal
+Contains private application and library code (not to be used by outsiders)
+
+    /pkg
+Contains code that is ok to be used by external libraries
+
+    /vendor
+Contains third party libraries
+
+    /scripts
+Auxiliary scripts
+
+
+* The basics
+.image img/GOPHER_ACADEMY.png _ 500
+
+* Packages
+.code pkg/dilab/packages.go
+
+* Primitives
+* 
+.code pkg/dilab/basics.go /^func ListOfVariables/,/^}/
+
+* 
+.code pkg/dilab/basics.go /^func structExample/,/^}/
+
+
+* Notes
+- Exported members are capitalized and can be used by everyone
+    SomeExportedFunc()
+
+- Unexported members are *NOT* capitalized, and can *only* be used within packages
+    thisIsUnexported()
+
+- Go doesn't have objects or inheritance: it uses composition
+
+- Null values depend on the type
+
+- Only two package names are allowed within a folder (package & package_test)
+
+* Error Handling
+.image img/Hugging_Gophers.png _ 500
+
+* 
+.code pkg/dilab/basics.go /^func ErrorHandling/,/^}/
+
+* Pointers
+.image img/GopherBatman.png _ 500
+
+* The Theory
+
+- A pointer is a value that points to the memory address of another variable
+
+[[https://dave.cheney.net/2017/04/26/understand-go-pointers-in-less-than-800-words-or-your-money-back][(Dave Cheney)]]
+
+- It is not possible to create a Go program where two variables share the same storage location in memory
+- It is possible to create two variables whose contents point to the same storage location...
+- ...but that is not the same thing as two variables who share the same storage location.
+
+* In Practice
+.code pkg/dilab/pointers.go /^func pointers/,/^}/
+
+* 
+.code pkg/dilab/pointers.go /START OMIT/,/END OMIT/
+
+* 
+.code pkg/dilab/pointers.go /^func AwesomeFuncUse/,/^}/
+
+* Interfaces
+.image img/DOCTOR_STRANGE_GOPHER.png _ 500
+
+* 
+.code pkg/dilab/dilab.go
+
+* 
+.code pkg/dilab/interfaces.go
+
+* Methods: Pointer or Value receiver?
+If in doubt, use a pointer, but there are times when a value receiver makes sense, usually for reasons of efficiency, such as for small unchanging structs or values of basic type.
+
+
+[[https://github.com/golang/go/wiki/CodeReviewComments#receiver-type][(Go Code Review Comments)]]
+
+* Channels
+.image img/GOPHER_SAFARI.png _ 500
+
+* 
+.code pkg/dilab/channels.go /^func SimpleChannels/,/^}/
+
+* 
+.code pkg/dilab/channels.go /^func ChannelUsage/,/^}/
+.code pkg/dilab/channels.go /^func boring/,/^}/
+
+* 
+- Concurrency is the composition of independently executing computations.
+- ... it is not parallelism!
+
+[[https://talks.golang.org/2012/concurrency.slide#1][(Go Concurrency Patterns)]]
+
+* A Simple Server
+.image img/GOPHER_MIC_DROP_WITH_BACKGROUND.png _ 500
+
+* 
+.code cmd/starwars/main.go
+
+
+
+* Testing
+.image img/STAR_TREK_GOPHER.png _ 500
+
+* A Simple Case
+.code pkg/dilab/sum.go /^func Sum/,/^}/
+.code pkg/dilab/sum_test.go /^func TestSum/,/^}/
+
+* Table driving it
+
+.code pkg/dilab/sum_tdd_test.go /^func TestTDDSum/,/^}/
+
+* About Table Driven Tests
+- They make it easy to add new test cases
+- Testing exhaustive scenarios is simple
+
+*Debatable*
+
+- Do this pattern a lot, even for single cases
+- Naming is key!
+
+(Mitchell Hashimoto)
+
+
+* Recommended frameworks 
+.image img/Facepalm_Picard_Gopher.png _ 500
+
+* Recommended Frameworks
+None!
+
+* Mocking out dependencies
+.image img/GOPHER_MIC_DROP_WITH_BACKGROUND.png _ 500
+
+* The Car Interface
+.code pkg/dilab/dilab.go /^type Car/,/^}/
+
+
+* The Driver
+.code pkg/dilab/dependency.go /START OMIT/,/END OMIT/
+
+* The Mock
+.code pkg/dilab/mocks_test.go /START OMIT/,/END OMIT/
+
+* The Test
+.code pkg/dilab/dependency_test.go /^func TestDriver/,/^}/
+
+
+
+* Faking Servers
+.image img/GopherBatman.png _ 500
+
+* The Client
+.code pkg/dilab/client.go /START OMIT/,/END OMIT/
+
+* The Test
+.code pkg/dilab/client_test.go /^func TestClient/,/^}/
+
+* Monkey Patching & Unexported Fields
+.image img/GOPHER_SAFARI.png _ 500
+
+* The Clock
+.code pkg/dilab/unexported.go
+
+* export_test.go
+.code pkg/dilab/export_test.go
+
+* The Test
+.code pkg/dilab/unexported_test.go /^func TestClock/,/^}/
+
+* Test Fixtures
+.image img/DOCTOR_STRANGE_GOPHER.png _ 500
+
+* 
+- `pwd` is always the package directory when Testing
+- Consider creating a `test-fixtures` folder under package level for auxiliary files
+- Some examples: configs, model data, etc.
+
+.code pkg/dilab/fixtures_test.go /^func TestFixtures/,/^}/
+
+* Test Helpers
+.image img/Hugging_Gophers.png _ 500
+
+* 
+- Useful for repetitive and predictive functions (e.g. changing a dir)
+- Use them sparingly
+- Never return errors, `t.Fatal()`
+"A little copying is better than a little dependency" [[https://go-proverbs.github.io/][(go proverbs)]]
+
+* MOAR
+.image img/BuffaloCast.png _ 500
+
+* Tips
+- Use golden files to test complex output (no need to hardcode it)
+- Avoid global state
+- Test exported functions, the rest is implementation details
+- Use `t.Parallel()` for parallelization... But be aware of uncertainty!
+
+* Good Practices
+.image img/GOPHER_STAR_WARS.png _ 500
+
+* General
+- Don't immediately search for a framework that does X; it's usually easy to DIY with Go
+- A Go project can virtually run without dependencies
+- Use short and descriptive names for variables (count instead of c, cust instead of customer)
+- Single letter variables are only OK to represent indexes
+- Use scoping to guide you in naming (the farther away, the more descriptive the name)
+- Avoid package-level function name that repeates package name (e.g. log.LogInfo)
+
+* General (cont.)
+- There are no setters and getters.
+- One function interfaces should be named by appending "-er" (e.g. Stringer)
+- Don't do CustomerStorer (do CustomerStorage)
+- Avoid else clauses (use return)
+
+
+* Packages
+* Naming
+- Package naming and organization will have a huge impact on Go code
+- Package names describe their purpose 
+- They should be short (e.g. trasnsport and not transportmecahnisms)
+- They should be clear, and describe external dependency (bytes, postgres)
+- Avoid catchall packages (util, helpers)
+
+* Organization
+- Avoid creating too many or too few packages
+- Packages should contain code that has one purpose (e.g. archive, crypto, IdKit)
+- Sometimes you need to organize packages under a parent, for organizational purposes
+- Interfaces should be declared under the parent package, and subpackages should implement the interface
+
+* Organization (cont.)
+- Package organization has a big impact on testability
+- Always write code that is easy to understand, refactor, and maintain
+
+* Package categories
+- Domain Types model business functionality, objects (e.g. Employee, Product, Suupplier)
+- Services operate on/with domain types 
+- More on this: [[https://medium.com/@benbjohnson/standard-package-layout-7cdbc8391fc1][Ben Johnson]]
+- Package containing domain types should define interfaces between domain types and world (ProductService, EmployeeStorage)
+- Domain types should be in the root of the package repo
+
+* Package categories
+- Domain type/root package should not have any external dependencies
+- It only exists to describe types and their behaviors
+
+* Implementation
+- The implementation of domain interfaces should be in separate packages, organized by dependency
+- E.g. Employee and EmployeeSaver => create package postgres with implementation for Postgres DB
+
+* Dependencies
+- External Data Sources (http, other services, etc.)
+- Don't declare them in the interfaces
+- One Package per dependency
+
+
+* Go Proverbs Overview
+- Don't communicate by sharing memory, share memory by communicating.
+- Concurrency is not parallelism.
+- The bigger the interface, the weaker the abstraction.
+- Make the zero value useful.
+- interface{} says nothing.
+- Gofmt's style is no one's favorite, yet gofmt is everyone's favorite.
+- A little copying is better than a little dependency.
+
+* Go Proverbs (Cont.)
+- Clear is better than clever.
+- Errors are values.
+- Don't just check errors, handle them gracefully.
+- Design the architecture, name the components, document the details.
+- Documentation is for users.
+- Don't panic.
+
+
+* Resources
+.image img/GOPHER_ACADEMY.png _ 500
+
+* Useful Links
+.link https://golang.org/pkg/testing/ Official Testing Docs
+.link https://github.com/golang-standards/project-layout Project Layout
+.link https://go-proverbs.github.io/ Go Proverbs
+.link https://talks.golang.org/2012/concurrency.slide#1 Go Concurrency Patterns
+.link https://speakerdeck.com/mitchellh/advanced-testing-with-go Hashimoto, Advanced Testing in Go
+.link https://medium.com/@benbjohnson/structuring-tests-in-go-46ddee7a25c Ben Johnson, Testing in Go
+.link https://gobyexample.com/pointers Go by Example
+
+* Useful Links (MORE)
+.link https://www.youtube.com/watch?v=8hQG7QlcLBk Hashimoto, Advanced Testing in Go (Video)
+.link https://www.youtube.com/watch?v=MzTcsI6tn-0 Ashley McNamara + Brian Ketelsen, Go best practices (Video)
+.link https://www.youtube.com/watch?v=yi5A3cK1LNA&t=443s Blake Mizerany, Three fallacies of dependencies(Video)
+.link https://github.com/upspin/upspin Upspin (Inspiration)
+.link https://github.com/kubernetes/kubernetes Kubernetes (Inspiration)
+
+
+
+
+* 
+.image img/DEATH_METAL_GOPHER.png _ 500

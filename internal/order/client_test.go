@@ -118,8 +118,7 @@ func TestPlaceOrder(t *testing.T) {
 				t.Logf("\t\tWant: %+v", b)
 				t.Errorf("\t%s\tShould have matching orders.", Failed)
 			} else {
-
-				t.Errorf("\t%s\tShould have matching orders.", Success)
+				t.Logf("\t%s\tShould have matching orders.", Success)
 			}
 
 			if !reflect.DeepEqual(res, testOrder) {
@@ -127,7 +126,6 @@ func TestPlaceOrder(t *testing.T) {
 				t.Logf("\t\tWant: %+v", testOrder)
 				t.Errorf("\t%s\tShould have matching orders.", Failed)
 			} else {
-
 				t.Logf("\t%s\tShould have matching orders.", Success)
 			}
 
@@ -135,7 +133,7 @@ func TestPlaceOrder(t *testing.T) {
 	}
 }
 
-func Test(t *testing.T) {
+func TestErrors(t *testing.T) {
 	testCases := []struct {
 		desc       string
 		statusCode int
@@ -177,99 +175,4 @@ func Test(t *testing.T) {
 		})
 	}
 
-}
-
-func TestPlaceOrderErrors(t *testing.T) {
-	newOrder := NewOrder{
-		Address: APIKey{
-			APIKey: "someAddressKey",
-		},
-		Card: APIKey{
-			APIKey: "someCardKey",
-		},
-		Items:   testOrder.Items,
-		Method:  testOrder.Method,
-		Payment: testOrder.Payment,
-		Recipient: APIKey{
-			APIKey: testOrder.RecipientAPIKey,
-		},
-		RestaurantAPIKey: testOrder.RestaurantAPIKey,
-		Test:             true,
-	}
-
-	// expected
-	expAuth := "someApiKey"
-	expContent := "application/json"
-	expPath := "/publicapi/v1/send-order"
-	// actual
-	var actAuth string
-	var actContent string
-	var actPath string
-	var actReqBody []byte
-
-	t.Log("Given an order mock server and request.")
-	{
-
-		srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			actPath = r.URL.Path
-			actAuth = r.Header.Get("X-Access-Token")
-			actContent = r.Header.Get("Content-Type")
-			actReqBody, _ = ioutil.ReadAll(r.Body)
-			w.Write(rawTestOrder)
-		}))
-		defer srv.Close()
-
-		httpCl := http.DefaultClient
-		cl := &Client{
-			Host:   srv.URL,
-			HTTP:   httpCl,
-			APIKey: expAuth,
-		}
-
-		t.Log("\tWhen placing an order.")
-		{
-			res, err := cl.PlaceOrder(newOrder)
-
-			if err != nil {
-				t.Fatalf("\t%s\tShould be able to place an order : %s.", Failed, err)
-			}
-			t.Logf("\t%s\tShould be able to place an order.", Success)
-
-			if actPath != expPath {
-				t.Log("\t\tGot : ", actPath)
-				t.Log("\t\tWant: ", expPath)
-				t.Errorf("\t%s\tShould have correct auth header.", Failed)
-			}
-			t.Logf("\t%s\tShould have correct auth header.", Success)
-
-			if actAuth != expAuth {
-				t.Log("\t\tGot : ", actAuth)
-				t.Log("\t\tWant: ", expAuth)
-				t.Errorf("\t%s\tShould have correct auth header.", Failed)
-			}
-			t.Logf("\t%s\tShould have correct auth header.", Success)
-
-			if actContent != expContent {
-				t.Log("\t\tGot : ", actContent)
-				t.Log("\t\tWant: ", expContent)
-				t.Errorf("\t%s\tShould have correct content type.", Failed)
-			}
-			t.Logf("\t%s\tShould have correct content type.", Success)
-
-			b, _ := json.Marshal(newOrder)
-			if !reflect.DeepEqual(actReqBody, b) {
-				t.Logf("\t\tGot : %+v", actReqBody)
-				t.Logf("\t\tWant: %+v", b)
-				t.Errorf("\t%s\tShould have matching orders.", Failed)
-			}
-
-			if !reflect.DeepEqual(res, testOrder) {
-				t.Logf("\t\tGot : %+v", res)
-				t.Logf("\t\tWant: %+v", testOrder)
-				t.Errorf("\t%s\tShould have matching orders.", Failed)
-			}
-			t.Logf("\t%s\tShould have matching orders.", Failed)
-
-		}
-	}
 }
