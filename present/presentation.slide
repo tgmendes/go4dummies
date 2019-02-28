@@ -11,17 +11,19 @@ tiago@vw-dilab.com
 .image img/GO_LEARN.png _ 500
 
 * Simplicity and Explicitness
-A web server
+.play ../snippets/server/main.go
 
 * Standard Library 
-A json example
+.play ../snippets/json/main.go  /^func main/,/^}/
 
 * Concurrency
-a concurrency example
+.play ../snippets/concurrency/main.go /START OMIT/,/END OMIT/
 
-
-* Built for the web
-slight history
+* Other Advantages
+- Designed to improve programming productivity
+- Built with modern use cases in mind
+- Testing framework out of the box
+- _Batteries_ _included_
 
 * Go... Huh, yeah, what is it good for?
 .image img/DEATH_METAL_GOPHER.png _ 500
@@ -41,38 +43,71 @@ slight history
 - [[https://github.com/mholt/caddy][Caddy]]
 - [[https://github.com/prometheus/prometheus][Prometheus]]
 - [[https://github.com/gohugoio/hugo][Hugo]]
+- [[https://github.com/ethereum/go-ethereum][Ethereum]]
+- [[https://github.com/influxdata/influxdb][InfluxDB]]
 
 
 * (even more) Stranger things...
 .image img/StrangerThingsGophers.png _ 500
 
 * Composition vs Inheritance
-- Insert struct example
+.code ../snippets/json/main.go /^type People/,/^}/
+
+* 
+.code ../snippets/json/main.go /^type PeopleAPI/,/^}/
+
 
 * Interface implementation
-- insert interface example
+.code ../snippets/interfaces/main.go 
+
 
 * Error handling
-- insert error example
+.code ../snippets/errors/main.go /START OMIT/,/END OMIT/
 
-* Ideomatic stuff
-- Lots of concise variable naming (not uncommon to see `r` , `w` , `err` , `b` , etc.);
-- No generics;
-- Lack of functional style helpers (e.g. `forEach` , `map` , etc.);
+* 
+.code ../snippets/errors/main.go  /^func uselessFunc/,/^}/
+
+* 
+.play ../snippets/errors/main.go  /^func main/,/^}/
+
+* Good to know
+- It's common to see concise, short variable names (`r` , `w` , `err` , `b` , etc.);
+- There are no generics;
+- There are no functional style helpers (e.g. `forEach` , `map` , etc.) out of the box;
 - No private, protected or public concept - exported or unexported instead;
 - Comments are mandatory (by linting) on exported variables and functions;
-- Unused imports or variables are a compilation error;
+- Unused imports or variables result in a compilation error;
 - You need to deal with pointers.
 
 * GopherEats API
 .image img/CouchPotatoGopher.png _ 500
 
-* Consuming third party APIs
-* The code
-* The test
-* Another example
-* Another test
 
+* Consuming APIs
+- Based on the EatStreet API
+- Food Delivery Service (placement and payment of orders, restaurants, etc.)
+
+* The Order Client
+.code ../internal/order/client.go  /^type Client/,/^}/
+
+* Marshalling the Request Body
+.code ../internal/order/client.go /FIRST OMIT/,/ENDFIRST OMIT/
+
+* Making the Request
+.code ../internal/order/client.go /SEC OMIT/,/ENDSEC OMIT/
+
+* Handling Results
+.code ../internal/order/client.go /THIRD OMIT/,/ENDTHIRD OMIT/
+
+* Testing It
+* 
+.code ../internal/order/client_test.go /A OMIT/,/ENDA OMIT/
+
+* 
+.code ../internal/order/client_test.go /B OMIT/,/ENDB OMIT/
+
+* 
+.code ../internal/order/client_test.go /C OMIT/,/ENDC OMIT/
 
 * Going Concurrent
 * implement restaurant crawler

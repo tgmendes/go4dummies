@@ -21,6 +21,9 @@ var testOrder *Order
 var rawTestOrder []byte
 var newOrder NewOrder
 
+type MockHTTPClient struct {
+}
+
 func init() {
 	testOrder = &Order{}
 	rawTestOrder, _ = ioutil.ReadFile("test-fixtures/test-order.json")
@@ -44,93 +47,82 @@ func init() {
 	}
 }
 
+// A OMIT
 func TestPlaceOrder(t *testing.T) {
+	// GIVEN
 	// expected
 	expAuth := "someApiKey"
 	expContent := "application/json"
 	expPath := "/publicapi/v1/send-order"
+
 	// actual
 	var actAuth string
 	var actContent string
 	var actPath string
 	var actReqBody []byte
+	// ENDA OMIT
 
-	t.Log("Given an order mock server and request.")
-	{
+	// B OMIT
+	// Test Server
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		actPath = r.URL.Path
+		actAuth = r.Header.Get("X-Access-Token")
+		actContent = r.Header.Get("Content-Type")
+		actReqBody, _ = ioutil.ReadAll(r.Body)
+		w.Write(rawTestOrder)
+	}))
+	defer srv.Close()
 
-		srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			actPath = r.URL.Path
-			actAuth = r.Header.Get("X-Access-Token")
-			actContent = r.Header.Get("Content-Type")
-			actReqBody, _ = ioutil.ReadAll(r.Body)
-			w.Write(rawTestOrder)
-		}))
-		defer srv.Close()
-
-		httpCl := http.DefaultClient
-		cl := &Client{
-			Host:   srv.URL,
-			HTTP:   httpCl,
-			APIKey: expAuth,
-		}
-
-		t.Log("\tWhen placing an order.")
-		{
-			res, err := cl.PlaceOrder(newOrder)
-
-			if err != nil {
-				t.Fatalf("\t%s\tShould be able to place an order : %s.", Failed, err)
-			} else {
-
-				t.Logf("\t%s\tShould be able to place an order.", Success)
-			}
-
-			if actPath != expPath {
-				t.Log("\t\tGot : ", actPath)
-				t.Log("\t\tWant: ", expPath)
-				t.Errorf("\t%s\tShould have correct auth header.", Failed)
-			} else {
-
-				t.Logf("\t%s\tShould have correct auth header.", Success)
-			}
-
-			if actAuth != expAuth {
-				t.Log("\t\tGot : ", actAuth)
-				t.Log("\t\tWant: ", expAuth)
-				t.Errorf("\t%s\tShould have correct auth header.", Failed)
-			} else {
-
-				t.Logf("\t%s\tShould have correct auth header.", Success)
-			}
-
-			if actContent != expContent {
-				t.Log("\t\tGot : ", actContent)
-				t.Log("\t\tWant: ", expContent)
-				t.Errorf("\t%s\tShould have correct content type.", Failed)
-			} else {
-
-				t.Logf("\t%s\tShould have correct content type.", Success)
-			}
-
-			b, _ := json.Marshal(newOrder)
-			if !reflect.DeepEqual(actReqBody, b) {
-				t.Logf("\t\tGot : %+v", actReqBody)
-				t.Logf("\t\tWant: %+v", b)
-				t.Errorf("\t%s\tShould have matching orders.", Failed)
-			} else {
-				t.Logf("\t%s\tShould have matching orders.", Success)
-			}
-
-			if !reflect.DeepEqual(res, testOrder) {
-				t.Logf("\t\tGot : %+v", res)
-				t.Logf("\t\tWant: %+v", testOrder)
-				t.Errorf("\t%s\tShould have matching orders.", Failed)
-			} else {
-				t.Logf("\t%s\tShould have matching orders.", Success)
-			}
-
-		}
+	// HTTP Client
+	httpCl := http.DefaultClient
+	cl := &Client{
+		Host:   srv.URL,
+		HTTP:   httpCl,
+		APIKey: expAuth,
 	}
+
+	// WHEN
+	res, err := cl.PlaceOrder(newOrder) // HL
+	// ENDB OMIT
+
+	// C OMIT
+	// THEN
+	if err != nil {
+		t.Fatalf("\t%s\tShould be able to place an order : %s.", Failed, err)
+	}
+
+	if actPath != expPath {
+		t.Log("\t\tGot : ", actPath)
+		t.Log("\t\tWant: ", expPath)
+		t.Errorf("\t%s\tShould have correct auth header.", Failed)
+	}
+
+	if actAuth != expAuth {
+		t.Log("\t\tGot : ", actAuth)
+		t.Log("\t\tWant: ", expAuth)
+		t.Errorf("\t%s\tShould have correct auth header.", Failed)
+	}
+
+	// ENDC OMIT
+	if actContent != expContent {
+		t.Log("\t\tGot : ", actContent)
+		t.Log("\t\tWant: ", expContent)
+		t.Errorf("\t%s\tShould have correct content type.", Failed)
+	}
+
+	b, _ := json.Marshal(newOrder)
+	if !reflect.DeepEqual(actReqBody, b) {
+		t.Logf("\t\tGot : %+v", actReqBody)
+		t.Logf("\t\tWant: %+v", b)
+		t.Errorf("\t%s\tShould have matching orders.", Failed)
+	}
+
+	if !reflect.DeepEqual(res, testOrder) {
+		t.Logf("\t\tGot : %+v", res)
+		t.Logf("\t\tWant: %+v", testOrder)
+		t.Errorf("\t%s\tShould have matching orders.", Failed)
+	}
+
 }
 
 func TestErrors(t *testing.T) {
