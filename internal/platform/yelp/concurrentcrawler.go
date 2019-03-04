@@ -2,20 +2,16 @@ package yelp
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"regexp"
 
 	"golang.org/x/net/html"
 )
 
-func ConcorrentCrawl(location string, start int, ch chan string, done chan bool) {
+func ConcurrentCrawl(location string, start int, ch chan Restaurant, done chan bool) {
 	url := fmt.Sprintf("https://www.yelp.com/search?find_loc=%s&start=%d", location, start)
 
-	resp, err := http.Get(url)
-	if err != nil {
-		log.Fatal(err)
-	}
+	resp, _ := http.Get(url)
 
 	defer func() {
 		done <- true
@@ -26,11 +22,10 @@ func ConcorrentCrawl(location string, start int, ch chan string, done chan bool)
 
 	doc, _ := html.Parse(b)
 
-	rest := &Restaurants{}
-	extractRestaurant(doc, rest, ch)
+	extractRestaurant(location, start, doc, ch)
 }
 
-func extractRestaurant(node *html.Node, rest *Restaurants, ch chan string) {
+func extractRestaurant(location string, page int, node *html.Node, ch chan Restaurant) {
 	var retaurantClass = regexp.MustCompile(`heading`)
 
 	if node.Type == html.ElementNode && node.Data == "h3" {
@@ -38,13 +33,18 @@ func extractRestaurant(node *html.Node, rest *Restaurants, ch chan string) {
 			if attr.Key == "class" && retaurantClass.MatchString(attr.Val) {
 				for c := node.FirstChild; c != nil; c = c.NextSibling {
 					if c.Data == "a" {
-						ch <- c.FirstChild.Data
+						ch <- Restaurant{
+							Name:     c.FirstChild.Data,
+							Location: location,
+							Page:     page,
+						}
+
 					}
 				}
 			}
 		}
 	}
 	for c := node.FirstChild; c != nil; c = c.NextSibling {
-		extractRestaurant(c, rest, ch)
+		extractRestaurant(location, page, c, ch)
 	}
 }

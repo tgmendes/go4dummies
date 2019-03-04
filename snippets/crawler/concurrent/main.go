@@ -19,13 +19,16 @@ func main() {
 		1,
 		10,
 	}
+
 	chRest := make(chan string)
 	chDone := make(chan bool)
+
 	for _, l := range locations {
 		for _, p := range pages {
-			go yelp.ConcorrentCrawl(l, p, chRest, chDone)
+			go yelp.ConcurrentCrawl(l, p, chRest, chDone)
 		}
 	}
+
 	for c := 0; c < len(locations)*len(pages); {
 		select {
 		case rest := <-chRest:

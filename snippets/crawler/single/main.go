@@ -18,13 +18,11 @@ func main() {
 	pages := []int{
 		1,
 		10,
-		20,
-		30,
 	}
 	for _, l := range locations {
 		for _, p := range pages {
 
-			rests := yelp.Crawl(l, p)
+			rests := yelp.SimpleCrawl(l, p)
 			for _, r := range *rests {
 				allRests = append(allRests, r)
 			}
