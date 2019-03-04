@@ -9,6 +9,12 @@ import (
 	"golang.org/x/net/html"
 )
 
+type Restaurants []string
+
+func (r *Restaurants) append(t string) {
+	*r = append(*r, t)
+}
+
 func SimpleCrawl(location string, start int) *Restaurants {
 	url := fmt.Sprintf("https://www.yelp.com/search?find_loc=%s&start=%d", location, start)
 	resp, err := http.Get(url)
