@@ -9,11 +9,10 @@ import (
 func main() {
 	c := make(chan string)
 
-	go greeter("Luke", c, 1000)
-	go greeter("Leia", c, 10)
-	go greeter("Obi-Wan", c, 400)
+	go greeter("Luke", c, 1000)   // HL
+	go greeter("Leia", c, 10)     // HL
+	go greeter("Obi-Wan", c, 400) // HL
 
-	// go func() {
 	for n := 0; n < 3; n++ {
 		select {
 		case res := <-c:
@@ -24,7 +23,7 @@ func main() {
 
 func greeter(person string, c chan string, delay int) {
 	time.Sleep(time.Duration(delay) * time.Millisecond)
-	c <- fmt.Sprintf("Hello, %s", person)
+	c <- fmt.Sprintf("Hello, %s", person) // HL
 }
 
 // END OMIT

@@ -7,7 +7,6 @@ import (
 )
 
 func main() {
-	allRests := []string{}
 	locations := []string{
 		"lisbon",
 		"porto",
@@ -15,18 +14,13 @@ func main() {
 		"coimbra",
 	}
 
-	pages := []int{
-		1,
-		10,
-	}
+	pages := []int{1, 10}
 	for _, l := range locations {
 		for _, p := range pages {
-
-			rests := yelp.SimpleCrawl(l, p)
+			rests := yelp.SimpleCrawl(l, p) // HL
 			for _, r := range *rests {
-				allRests = append(allRests, r)
+				fmt.Println(r)
 			}
 		}
 	}
-	fmt.Println(allRests)
 }

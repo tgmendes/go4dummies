@@ -1,40 +1,26 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/tgmendes/go4dummies/internal/platform/yelp"
+
+	"github.com/tgmendes/go4dummies/internal/platform/db"
 )
 
 func main() {
-	// allRests := []string{}
-	locations := []string{
-		"lisbon",
-		"porto",
-		"faro",
-		"coimbra",
-	}
+	db, _ := db.New("127.0.0.1:27017/yelp", 0)
 
-	pages := []int{
-		1,
-		10,
+	cr := yelp.Crawler{
+		BaseURL: "https://www.yelp.com/search?find_loc=%s&start=%d",
+		DB:      db,
+		Locations: []string{"lisbon",
+			"porto",
+			"faro",
+			"coimbra",
+		},
+		Pages: []int{
+			1,
+			10,
+		},
 	}
-
-	chRest := make(chan string)
-	chDone := make(chan bool)
-
-	for _, l := range locations {
-		for _, p := range pages {
-			go yelp.ConcurrentCrawl(l, p, chRest, chDone)
-		}
-	}
-
-	for c := 0; c < len(locations)*len(pages); {
-		select {
-		case rest := <-chRest:
-			fmt.Println(rest)
-		case <-chDone:
-			c++
-		}
-	}
+	cr.CollectRestaurants()
 }

@@ -82,11 +82,7 @@ tiago@vw-dilab.com
 * GopherEats API
 .image img/CouchPotatoGopher.png _ 500
 
-
-* Consuming APIs
-- Based on the EatStreet API
-- Food Delivery Service (placement and payment of orders, restaurants, etc.)
-
+* Placing an Order
 * The Order Client
 .code ../internal/order/client.go  /^type Client/,/^}/
 
@@ -109,29 +105,71 @@ tiago@vw-dilab.com
 * 
 .code ../internal/order/client_test.go /C OMIT/,/ENDC OMIT/
 
-* Going Concurrent
-* implement restaurant crawler
+* Let's collect some restaurants!
+* A Crawler
+.code ../internal/platform/yelp/singlecrawler.go /^func SimpleCrawl/,/^}/
 
-* Using Databases
-* an example of storing restaurant data to the database
+* Using it
+.code ../cmd/crawler/single/main.go /^func main/,/^}/
+
+* Concurrency & Persistence
+.code ../internal/platform/yelp/yelp.go /^type DBConnection/,/^}/
+
+.code ../internal/platform/yelp/crawler.go /^type Crawler/,/^}/
+
+* 
+.code ../internal/platform/yelp/crawler.go /START OMIT/,/END OMIT/
+
+* Using It
+.code ../internal/platform/yelp/crawler.go /^func Crawl/,/^}/
+
+* 
+.code ../internal/platform/yelp/crawler.go /^func extractRestaurant/,/^}/
+
+* Testing It
+* Database Mock
+.code ../internal/platform/yelp/crawler_test.go /MOCK OMIT/,/ENDMOCK OMIT/
+
+* Yelp Server Mock
+.code ../internal/platform/yelp/crawler_test.go /YELP OMIT/,/ENDYELP OMIT/
+
+* The Test
+.code ../internal/platform/yelp/crawler_test.go /TEST OMIT/,/ENDTEST OMIT/
+
+
+* Going Live!
+* Orders handler
+.code ../cmd/handlers/orders.go  /ORDERONE OMIT/,/ENDORDERONE OMIT/
+
+* 
+.code ../cmd/handlers/orders.go  /ORDERTWO OMIT/,/ENDORDERTWO OMIT/
+
+* Restaurants handler
+.code ../cmd/handlers/restaurants.go  /^func CrawlYelp/,/^}/
+
+* Testing the Handlers
+* Table Driven Tests
+.code ../cmd/handlers/orders_test.go   /TDT OMIT/,/ENDTDT OMIT/
+
+* Ranging Over Tests
+.code ../cmd/handlers/orders_test.go   /RUN OMIT/,/ENDRUN OMIT/
+
+* Verifying
+.code ../cmd/handlers/orders_test.go   /ASSERT OMIT/,/ENDASSERT OMIT/
 
 * The Server
-* handlefunc
-* handler
-* mux
-* test example
+.code ../cmd/main.go /^func main/,/^}/
 
-* Tying it all up
-show the main
+* Serve Mux
+.code ../cmd/mux/main.go /^func main/,/^}/
 
-** Integration Testing
 
 * Project Layout
 .image img/GOPHER_ROCKS.png _ 500
 
 
     
-* Folder Structure Explained
+* Common Structure
     /cmd
 Contains all programs belonging to the project
 
@@ -141,7 +179,7 @@ Packages that need to be imported by programs within the project (cannot be impo
     /internal/platform
 Packages that support the project (database connectors, logging, etc.)
 
-* Folder Structure Explained (Cont.)
+* Common Structure (Cont.)
 
     /pkg
 Packages that should be imported by external programs
@@ -150,8 +188,6 @@ Packages that should be imported by external programs
 Contains third party libraries (becoming deprecated with go modules)
 
 
-* References
-.link https://www.ardanlabs.com/blog/2017/02/package-oriented-design.html Package Oriented Design (William Kennedy)
 
 * Good Practices
 .image img/GOPHER_STAR_WARS.png _ 500
@@ -195,4 +231,6 @@ Contains third party libraries (becoming deprecated with go modules)
 .link https://www.youtube.com/watch?v=yi5A3cK1LNA&t=443s Blake Mizerany, Three fallacies of dependencies(Video)
 .link https://github.com/upspin/upspin Upspin (Inspiration)
 .link https://github.com/kubernetes/kubernetes Kubernetes (Inspiration)
+.link https://www.ardanlabs.com/blog/2017/02/package-oriented-design.html Package Oriented Design (William Kennedy)
+
 

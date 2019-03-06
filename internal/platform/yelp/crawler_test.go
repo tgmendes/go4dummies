@@ -10,6 +10,7 @@ import (
 	"gopkg.in/mgo.v2"
 )
 
+// MOCK OMIT
 type MockDB struct {
 	executeFn     func(collName string, f func(*mgo.Collection) error) error
 	executeCalled int
@@ -20,8 +21,11 @@ func (db *MockDB) Execute(collName string, f func(*mgo.Collection) error) error 
 	return db.executeFn(collName, f)
 }
 
+// ENDMOCK OMIT
+
 func TestCrawler(t *testing.T) {
 	// given
+	// YELP OMIT
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		body := `
 			<body>
@@ -33,7 +37,9 @@ func TestCrawler(t *testing.T) {
 		w.Write([]byte(body))
 	}))
 	defer ts.Close()
+	// ENDYELP OMIT
 
+	// TEST OMIT
 	mockDb := &MockDB{
 		executeFn: func(collName string, f func(*mgo.Collection) error) error {
 			return nil
@@ -41,19 +47,21 @@ func TestCrawler(t *testing.T) {
 	}
 
 	c := yelp.Crawler{
-		BaseURL:   ts.URL + "?page=%s&start=%d",
+		BaseURL:   ts.URL + "?find_loc=%s&start=%d",
 		DB:        mockDb,
 		Locations: []string{"foo"},
 		Pages:     []int{1},
 	}
 
-	c.CollectRestaurants()
+	c.CollectRestaurants() // HL
 
 	if mockDb.executeCalled != 1 {
 		t.Logf("expected: 1")
 		t.Logf("got: %d", mockDb.executeCalled)
 		t.Fatal("number of calls do not match")
 	}
+	// ENDTEST OMIT
+
 }
 
 func TestCrawl(t *testing.T) {

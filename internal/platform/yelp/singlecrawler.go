@@ -2,29 +2,29 @@ package yelp
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"regexp"
 
 	"golang.org/x/net/html"
 )
 
+// Restaurants represents a list of restaurants from yelp.
 type Restaurants []string
 
 func (r *Restaurants) append(t string) {
 	*r = append(*r, t)
 }
 
+// SimpleCrawl will crawl the yelp page without concurrency.
 func SimpleCrawl(location string, start int) *Restaurants {
 	url := fmt.Sprintf("https://www.yelp.com/search?find_loc=%s&start=%d", location, start)
-	resp, err := http.Get(url)
-	if err != nil {
-		log.Fatal(err)
-	}
+	resp, _ := http.Get(url)
 
 	doc, _ := html.Parse(resp.Body)
 
 	rest := &Restaurants{}
+	// this will parse the HTML document for restaurant names
+	// and append results to a restaurant list.
 	extractRestaurants(doc, rest)
 	return rest
 }
