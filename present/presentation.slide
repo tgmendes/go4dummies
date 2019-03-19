@@ -1,40 +1,45 @@
 Will you take that API to Go?
 Pixels Camp
-23 Mar 2019
+21 Mar 2019
 Tags: API, Server, Testing
 
 Tiago Mendes
-Volkswagen Digital Lab Lisbon
+Software Engineer, VW Software Development Center Lx
 tiago@vw-dilab.com
+@tiagogmendes
+@VWDS_SDCLX
 
-* Why Go?
-.image img/GO_LEARN.png _ 500
 
-* Simplicity and Explicitness
-.play ../snippets/server/main.go
+* Who Am I?
+.image img/BATMAN_GOPHER.png _ 500
 
-* Standard Library 
-.play ../snippets/json/main.go  /^func main/,/^}/
+* 
+- Software Developer since 2014
+- Joined VW SDC on July 2018
+- Main programming languages: Go, Python, JavaScript
+- Using Go since July 2018 
+- Guitar player and summer surfer!
 
-* Concurrency
-.play ../snippets/concurrency/main.go /START OMIT/,/END OMIT/
+* Facts (aka Wikipedia copy/paste)
+.image img/7TH_BIRTHDAY.png _ 500
 
-* Other Advantages
-- Designed to improve programming productivity
-- Built with modern use cases in mind
-- Testing framework out of the box
-- _Batteries_ _included_
+* 
+- Designed by Robert Griesemer, Rob Pike and Ken Thompson
+- Fist release: November 2009
+- Created at Google to increase programming productivity in the modern world
+- Motivation: shared dislike of C++
 
-* Go... Huh, yeah, what is it good for?
+* Go... "Huh, yeah, what is it good for?"
 .image img/DEATH_METAL_GOPHER.png _ 500
+
 
 * Some examples
 
-- Web Servers
+- Web servers
 - Command line utilities
 - Crawlers
 - Proxies
-- OS Stuff
+- OS stuff
 
 * Famous Go projects
 - [[https://github.com/docker/docker-ce][Docker]]
@@ -46,28 +51,83 @@ tiago@vw-dilab.com
 - [[https://github.com/ethereum/go-ethereum][Ethereum]]
 - [[https://github.com/influxdata/influxdb][InfluxDB]]
 
+* Why Go?
+.image img/GO_LEARN.png _ 500
 
-* (even more) Stranger things...
+* Simplicity and Explicitness
+A simple web server:
+.play ../snippets/server/main.go
+
+* Standard Library 
+Reading (unmarshaling) a JSON file:
+.play ../snippets/json/main.go  /^func main/,/^}/
+
+* Concurrency
+.play ../snippets/concurrency/main.go /START OMIT/,/END OMIT/
+
+* Other Advantages
+- Built with modern use cases in mind
+- Testing framework out of the box
+- Fast and lightweight
+- _Batteries_ _included_
+- Fun (personal opinion)
+
+
+* Go in a Nutshell
+.image img/BUFFALO_CASTS.png _ 500
+
+* Exported/unexported
+- Similar to a public/protected concept;
+- Done by capitalization:
+
+.code ../snippets/exported/exported.go
+* Defer
+Defer delays the code execution to the end: 
+
+.play ../snippets/deferex/deferex.go
+
+* Pointers
+A pointer holds the memory address of a value:
+
+.play ../snippets/pointers/pointers.go
+
+* Structs
+Typed collections of fields:
+
+.play ../snippets/structs/structs.go /START OMIT/,/END OMIT/
+
+* Channels
+_"Channels_ _are_ _the_ _pipes_ _that_ _connect_ _concurrent_ _goroutines_. _You_ 
+_can_ _send_ _values_ _into_ _channels_ _from_ _one_ _goroutine_ _and_ _receive_ _those_ 
+_values_ _into_ _another_ _goroutine."_
+
+.play ../snippets/chanex/chanex.go
+
+* Strange things...
 .image img/StrangerThingsGophers.png _ 500
 
-* Composition vs Inheritance
+* Composition
+.code ../snippets/json/main.go /^type Film/,/^}/
+.code ../snippets/json/main.go /^type Species/,/^}/
+.code ../snippets/json/main.go /^type Vehicle/,/^}/
+.code ../snippets/json/main.go /^type Starship/,/^}/
+
+* Composition (cont.)
 .code ../snippets/json/main.go /^type People/,/^}/
 
-* 
-.code ../snippets/json/main.go /^type PeopleAPI/,/^}/
 
-
-* Interface implementation
+* Interfaces
+"Duck typing" (at compile time)
 .code ../snippets/interfaces/main.go 
 
 
 * Error handling
 .code ../snippets/errors/main.go /START OMIT/,/END OMIT/
 
-* 
+* Error handling (cont.)
 .code ../snippets/errors/main.go  /^func uselessFunc/,/^}/
 
-* 
+* Error handling (cont.)
 .play ../snippets/errors/main.go  /^func main/,/^}/
 
 * Good to know
@@ -82,7 +142,13 @@ tiago@vw-dilab.com
 * GopherEats API
 .image img/CouchPotatoGopher.png _ 500
 
+* What we're building
+.image img/GopherEats.png _ 1000
+
+
 * Placing an Order
+.image img/GopherEatsOrderClient.png _ 1000
+
 * The Order Client
 .code ../internal/order/client.go  /^type Client/,/^}/
 
@@ -106,6 +172,8 @@ tiago@vw-dilab.com
 .code ../internal/order/client_test.go /C OMIT/,/ENDC OMIT/
 
 * Let's collect some restaurants!
+.image img/GopherEatsRestaurantCrawler.png _ 1000
+
 * A Crawler
 .code ../internal/platform/yelp/singlecrawler.go /^func SimpleCrawl/,/^}/
 
@@ -139,12 +207,18 @@ tiago@vw-dilab.com
 
 * Going Live!
 * Orders handler
+.image img/GopherEatsOrdersHandler.png _ 1000
+
+* 
 .code ../cmd/handlers/orders.go  /ORDERONE OMIT/,/ENDORDERONE OMIT/
 
 * 
 .code ../cmd/handlers/orders.go  /ORDERTWO OMIT/,/ENDORDERTWO OMIT/
 
 * Restaurants handler
+.image img/GopherEatsRestaurantHandler.png _ 1000
+
+* 
 .code ../cmd/handlers/restaurants.go  /^func CrawlYelp/,/^}/
 
 * Testing the Handlers
@@ -158,36 +232,13 @@ tiago@vw-dilab.com
 .code ../cmd/handlers/orders_test.go   /ASSERT OMIT/,/ENDASSERT OMIT/
 
 * The Server
+.image img/GopherEatsServer.png _ 1000
+
+* 
 .code ../cmd/main.go /^func main/,/^}/
 
 * Serve Mux
 .code ../cmd/mux/main.go /^func main/,/^}/
-
-
-* Project Layout
-.image img/GOPHER_ROCKS.png _ 500
-
-
-    
-* Common Structure
-    /cmd
-Contains all programs belonging to the project
-
-    /internal
-Packages that need to be imported by programs within the project (cannot be imported by external programs)
-
-    /internal/platform
-Packages that support the project (database connectors, logging, etc.)
-
-* Common Structure (Cont.)
-
-    /pkg
-Packages that should be imported by external programs
-
-    /vendor
-Contains third party libraries (becoming deprecated with go modules)
-
-
 
 * Good Practices
 .image img/GOPHER_STAR_WARS.png _ 500
@@ -197,22 +248,19 @@ Contains third party libraries (becoming deprecated with go modules)
 - Use short and descriptive names for variables ( `count` instead of `c`, `cust` instead of `customer` );
 - Single letter variables are OK to use in limited scope situations (such as loop indices);
 - Use scoping to guide you in naming (the farther away, the more descriptive the name should be);
-- Avoid stuttering when naming package functions (prefer log.Info over log.LogInfo)
 
 * Package Naming
-- Package naming and organization will have a huge impact on Go code
+- Package naming and organization will have a huge impact on Go code and testability
 - Package names should describe their purpose 
-- They should be short (e.g. trasnsport and not transportmecahnisms)
-- They should be clear, and describe external dependency (bytes, postgres)
-- Avoid catchall packages (util, helpers)
-- Package organization has a big impact on testability
+- They should be short (e.g. `transport` and not `transportmecahnisms`)
+- They should be clear, and describe external dependency (`bytes`, `postgres`)
+- Avoid catchall packages (`util`, `helpers`)
+- Avoid stuttering when naming package functions (prefer `log.Info` over `log.LogInfo`)
 
 * Package Organization
 - Avoid creating too many or too few packages
-- Packages should contain code that has one purpose (e.g. archive, crypto, order)
-- Sometimes you need to organize packages under a parent, for organizational purposes
-- Consider organizing packages by domain
-- More on this: [[https://medium.com/@benbjohnson/standard-package-layout-7cdbc8391fc1][Ben Johnson]] 
+- Packages should contain code that has one purpose (e.g. `archive`, `crypto`, `order`)
+- Consider organizing packages by domain (more on this: [[https://medium.com/@benbjohnson/standard-package-layout-7cdbc8391fc1][Ben Johnson]])
 
 * Resources
 .image img/GOPHER_SAFARI.png _ 500
@@ -223,14 +271,16 @@ Contains third party libraries (becoming deprecated with go modules)
 .link https://talks.golang.org/2012/concurrency.slide#1 Go Concurrency Patterns
 .link https://speakerdeck.com/mitchellh/advanced-testing-with-go Hashimoto, Advanced Testing in Go
 .link https://medium.com/@benbjohnson/structuring-tests-in-go-46ddee7a25c Ben Johnson, Testing in Go
-.link https://gobyexample.com/pointers Go by Example
+.link https://gobyexample.com Go by Example
 
 * Useful Links (MORE)
 .link https://www.youtube.com/watch?v=8hQG7QlcLBk Hashimoto, Advanced Testing in Go (Video)
 .link https://www.youtube.com/watch?v=MzTcsI6tn-0 Ashley McNamara + Brian Ketelsen, Go best practices (Video)
-.link https://www.youtube.com/watch?v=yi5A3cK1LNA&t=443s Blake Mizerany, Three fallacies of dependencies(Video)
+.link https://www.youtube.com/watch?v=yi5A3cK1LNA&t=443s Blake Mizerany, Three fallacies of dependencies (Video)
 .link https://github.com/upspin/upspin Upspin (Inspiration)
 .link https://github.com/kubernetes/kubernetes Kubernetes (Inspiration)
 .link https://www.ardanlabs.com/blog/2017/02/package-oriented-design.html Package Oriented Design (William Kennedy)
 
 
+* Let's (re)start a community?
+.image img/GoCommunity.png _ 1000

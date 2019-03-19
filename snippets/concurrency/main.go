@@ -14,7 +14,8 @@ func main() {
 	go greeter("Obi-Wan", c, 400) // HL
 
 	for n := 0; n < 3; n++ {
-		select {
+		// Wait until a channel is ready.
+		select { // HL
 		case res := <-c:
 			fmt.Println(res)
 		}

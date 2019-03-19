@@ -4,14 +4,22 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"time"
 )
 
-type Film struct{}
-type Species struct{}
-type Vehicle struct{}
-type Starship struct{}
+type Film struct {
+	Name string
+}
+
+type Species struct {
+	Name string
+}
+type Vehicle struct {
+	Type string
+}
+type Starship struct {
+	Model string
+}
 
 // START OMIT
 // People represents each individual from the API response.
@@ -49,10 +57,7 @@ func main() {
 
 	b, _ := ioutil.ReadFile("sw_sample.json")
 
-	err := json.Unmarshal(b, pr) // HL
-	if err != nil {
-		log.Fatal("unable to unmarshal ", err.Error())
-	}
+	json.Unmarshal(b, pr) // HL
 
 	for _, p := range pr.Results {
 		fmt.Println(p.Name)

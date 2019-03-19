@@ -13,8 +13,8 @@ func main() {
 		"faro",
 		"coimbra",
 	}
-
 	pages := []int{1, 10}
+
 	for _, l := range locations {
 		for _, p := range pages {
 			rests := yelp.SimpleCrawl(l, p) // HL
