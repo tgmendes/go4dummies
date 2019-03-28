@@ -66,11 +66,12 @@ func TestOrders(t *testing.T) {
 	// RUN OMIT
 	for _, tC := range testCases { // HL
 		t.Run(tC.desc, func(t *testing.T) {
-			// GIVEN
 			// Test EatStreet Server
-			srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-				w.Write(rawTestOrder)
-			}))
+			srv := httptest.NewServer(http.HandlerFunc(
+				func(w http.ResponseWriter, r *http.Request) {
+					w.Write(rawTestOrder)
+				}),
+			)
 			defer srv.Close()
 
 			req, _ := http.NewRequest(tC.method, "http://example.com", bytes.NewBuffer(newOrder))
@@ -81,7 +82,6 @@ func TestOrders(t *testing.T) {
 				EatStreetHost:   srv.URL,
 			}
 
-			// WHEN
 			h.ServeHTTP(w, req) // HL
 
 			resp, _ := ioutil.ReadAll(w.Body)
@@ -89,7 +89,6 @@ func TestOrders(t *testing.T) {
 			json.Unmarshal(resp, orderResp)
 			// ENDRUN OMIT
 			// ASSERT OMIT
-			// THEN
 			if w.Code != tC.expCode {
 				t.Logf("expected: %d", tC.expCode)
 				t.Logf("got: %d", w.Code)

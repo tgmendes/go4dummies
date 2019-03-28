@@ -4,7 +4,8 @@ Pixels Camp
 Tags: API, Server, Testing
 
 Tiago Mendes
-Software Engineer, VW Software Development Center Lx
+Software Engineer
+Volkswagen Software Development Center Lisbon
 tiago@vw-dilab.com
 @tiagogmendes
 @VWDS_SDCLX
@@ -13,14 +14,15 @@ tiago@vw-dilab.com
 * Who Am I?
 .image img/BATMAN_GOPHER.png _ 500
 
-* 
+* About Me
 - Software Developer since 2014
-- Joined VW SDC on July 2018
 - Main programming languages: Go, Python, JavaScript
+- Joined Volkswagen SDC on July 2018
 - Using Go since July 2018 
 - Guitar player and summer surfer!
 
-* Facts (aka Wikipedia copy/paste)
+
+* Facts about Go (aka Wikipedia copy/paste)
 .image img/7TH_BIRTHDAY.png _ 500
 
 * 
@@ -237,17 +239,17 @@ _values_ _into_ _another_ _goroutine."_
 * 
 .code ../cmd/main.go /^func main/,/^}/
 
-* Serve Mux
+* ServeMux (Multiplexer)
 .code ../cmd/mux/main.go /^func main/,/^}/
 
 * Good Practices
 .image img/GOPHER_STAR_WARS.png _ 500
 
 * General
-- Less is more, so consider if you really need a framework; a Go project can virtually run without dependencies;
-- Use short and descriptive names for variables ( `count` instead of `c`, `cust` instead of `customer` );
-- Single letter variables are OK to use in limited scope situations (such as loop indices);
-- Use scoping to guide you in naming (the farther away, the more descriptive the name should be);
+- Less is more, so consider if you really need a framework; a Go project can virtually run without dependencies
+- Use short and descriptive names for variables ( `count` instead of `c`, `cust` instead of `customer` )
+- Single letter variables are OK to use in limited scope situations (such as loop indices)
+- Use scoping to guide you in naming (the farther away, the more descriptive the name should be)
 
 * Package Naming
 - Package naming and organization will have a huge impact on Go code and testability
@@ -281,6 +283,20 @@ _values_ _into_ _another_ _goroutine."_
 .link https://github.com/kubernetes/kubernetes Kubernetes (Inspiration)
 .link https://www.ardanlabs.com/blog/2017/02/package-oriented-design.html Package Oriented Design (William Kennedy)
 
+* Gopher Artwork
+.link https://twitter.com/ashleymcnamara @ashleymcnamara
+.link https://github.com/ashleymcnamara/gophers Repo
+
+.image img/VW_logo.png _ 400
+
 
 * Let's (re)start a community?
+.link http://bit.ly/2TNTEbW http://bit.ly/2TNTEbW 
 .image img/GoCommunity.png _ 1000
+
+
+* Visit us!
+Rua do Sol ao Rato, 11 
+.image img/IMG_0497.jpg _ 600
+
+
